@@ -1,0 +1,87 @@
+name:                hinteractive
+version:             0.1.0.0
+github:              "githubuser/hinteractive"
+license:             MIT
+author:              "Alexander Granin"
+maintainer:          "graninas@gmail.com"
+copyright:           "2018 Alexander Granin"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Game engine for interactive fiction games.
+# category:            Web
+
+description:         Please see the README on Github at <https://github.com/githubuser/hinteractive#readme>
+
+default-extensions:
+- DeriveFunctor
+- DeriveGeneric
+- FlexibleContexts
+- FlexibleInstances
+- LambdaCase
+- MultiParamTypeClasses
+- NamedFieldPuns
+- NumDecimals
+- OverloadedLabels
+- RankNTypes
+- ScopedTypeVariables
+- TypeFamilies
+- TypeOperators
+- ViewPatterns
+- GADTs
+- FunctionalDependencies
+
+dependencies:
+- base >= 4.7 && < 5
+- free
+- bytestring
+- mtl
+- transformers
+- hspec
+- containers
+- lens
+- aeson
+
+library:
+  source-dirs: src
+
+executables:
+  hinteractive-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hinteractive
+    default-extensions:
+    - DeriveFunctor
+    - DeriveGeneric
+    - FlexibleContexts
+    - FlexibleInstances
+    - LambdaCase
+    - MultiParamTypeClasses
+    - NamedFieldPuns
+    - NumDecimals
+    - OverloadedLabels
+    - RankNTypes
+    - ScopedTypeVariables
+    - TypeFamilies
+    - TypeOperators
+    - ViewPatterns
+    - GADTs
+    - FunctionalDependencies
+tests:
+  hinteractive-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hinteractive
