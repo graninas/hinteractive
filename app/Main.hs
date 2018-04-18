@@ -1,10 +1,6 @@
 module Main where
 
-import AdvGame.Game (runGame)
+import           ZorkLike.Game (runGame)
 
 main :: IO ()
-main = do
-  runGame
-
-
-  pure ()
+main = runGame

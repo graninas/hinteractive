@@ -1,4 +1,4 @@
-# Changelog for transition-graph
+# Changelog for hinteractive
 
 - Ver. 0.1 - Initial possibilities.
 

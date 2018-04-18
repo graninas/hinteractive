@@ -14,8 +14,7 @@ extra-source-files:
 # synopsis:            Game engine for interactive fiction games.
 # category:            Web
 
-description:         Please see the README on Github at <https://github.com/githubuser/hinteractive#readme>
-
+description:         Please see the README on Github at <https://github.com/graninas/hinteractive#readme>
 default-extensions:
 - DeriveFunctor
 - DeriveGeneric
@@ -44,6 +43,7 @@ dependencies:
 - containers
 - lens
 - aeson
+- transition-graph
 
 library:
   source-dirs: src
@@ -58,23 +58,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - hinteractive
-    default-extensions:
-    - DeriveFunctor
-    - DeriveGeneric
-    - FlexibleContexts
-    - FlexibleInstances
-    - LambdaCase
-    - MultiParamTypeClasses
-    - NamedFieldPuns
-    - NumDecimals
-    - OverloadedLabels
-    - RankNTypes
-    - ScopedTypeVariables
-    - TypeFamilies
-    - TypeOperators
-    - ViewPatterns
-    - GADTs
-    - FunctionalDependencies
+
 tests:
   hinteractive-test:
     main:                Spec.hs

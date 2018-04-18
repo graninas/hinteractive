@@ -1,19 +1,18 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module AdvGame.Interaction where
+module Hinteractive.Language.Interaction where
 
-import           Control.Lens      ((.~), (^.))
-import           Control.Lens.TH   (makeClassy, makeFieldsNoPrefix, makeLenses)
-import           Data.Aeson        (FromJSON, ToJSON)
-import           Data.Either       (Either)
-import qualified Data.Map          as Map
-import           Data.Maybe        (Maybe (..))
-import           GHC.Generics      (Generic)
+import           Control.Lens                   ((.~), (^.))
+import           Data.Aeson                     (FromJSON, ToJSON)
+import qualified Data.Map                       as Map
+import           Data.Maybe                     (Maybe (..))
+import           GHC.Generics                   (Generic)
 
-import           Lib               (Event)
+import           TransitionGraph                (Event)
 
-import           AdvGame.Container
-import           AdvGame.Lang
+import           Hinteractive.Domain
+import           Hinteractive.Language.Language
+import           Hinteractive.Lens
 
 getInput :: AdventureL (Event, ())
 getInput = do

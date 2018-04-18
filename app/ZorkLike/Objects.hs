@@ -5,10 +5,10 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TemplateHaskell       #-}
 
-module AdvGame.Objects where
+module ZorkLike.Objects where
 
 import           Control.Lens      ((.~), (^.))
-import           Control.Lens.TH   (makeClassy, makeFieldsNoPrefix, makeLenses)
+import           Control.Lens.TH   (makeFieldsNoPrefix)
 import           Data.Aeson        (FromJSON, ToJSON)
 import           Data.Either       (Either)
 import           Data.List         (intercalate)
@@ -16,8 +16,8 @@ import qualified Data.Map          as Map
 import           Data.Maybe        (Maybe (..))
 import           GHC.Generics      (Generic)
 
-import           AdvGame.Container
-import           AdvGame.Lang
+import           Hinteractive
+import           Hinteractive.Lens
 
 data MailboxObj = MailboxObj
   { _description :: String
@@ -27,6 +27,7 @@ data MailboxObj = MailboxObj
 
 makeFieldsNoPrefix ''MailboxObj
 
+-- TODO: move to engine
 openContainer :: HasContainer obj Container => obj -> Maybe obj
 openContainer obj = case obj ^. container.state of
   Opened -> Nothing

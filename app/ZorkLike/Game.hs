@@ -1,4 +1,6 @@
-module AdvGame.Game where
+{-# LANGUAGE ScopedTypeVariables #-}
+
+module ZorkLike.Game where
 
 import           Control.Monad             (unless, void, when)
 import           Control.Monad.Free        (Free (..), foldFree, liftF)
@@ -6,13 +8,9 @@ import           Control.Monad.Trans.State (evalStateT)
 import qualified Data.ByteString.Char8     as BS
 import qualified Data.Map                  as Map
 
-import           Lib
-
-import           AdvGame.Lang
-import           AdvGame.Objects
-import           AdvGame.Runtime           (run)
-import           AdvGame.Init              (inititalState)
-import           AdvGame.Interaction
+import           Hinteractive
+import           ZorkLike.Init             (inititalState)
+import           ZorkLike.Objects
 
 type AGGraph a b = Graph AdventureL a b
 
