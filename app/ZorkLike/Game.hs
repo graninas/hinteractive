@@ -12,14 +12,14 @@ import           Hinteractive
 import           ZorkLike.Init             (inititalState)
 import           ZorkLike.Objects
 
-type AGGraph a b = Graph AdventureL a b
+type AGGraph a = Graph AdventureL a
 
-openMailbox :: (Bool, Bool) -> AGGraph () ()
+openMailbox :: (Bool, Bool) -> AGGraph ()
 openMailbox houseView = graph $
   with (evalAction MailboxType "open" "mailbox" >> inputOnly houseView)
     -/> westOfHouse
 
-westOfHouse :: AGGraph (Bool, Bool) ()
+westOfHouse :: AGGraph (Bool, Bool)
 westOfHouse = graph $
   with1 (\x -> westOfHouse' x >> getInput)
     ~> on "open mailbox" (openMailbox (False, False))
@@ -33,7 +33,7 @@ westOfHouse' (showDescr, showMailbox) = do
   when showMailbox $ printMessage $ describeObject mailbox
   when showDescr   $ printMessage "A rubber mat saying 'Welcome to Zork!' lies by the door."
 
-game :: AGGraph () ()
+game :: AGGraph ()
 game = graph $
   with (inputOnly (True, True))
     -/> westOfHouse

@@ -68,4 +68,4 @@ packages:
 extra-deps:
 
 - git: https://github.com/graninas/transition-graph
-  commit: d1d5126bfc475e8e2b795f12140258ff726e1f00
+  commit: d29535f72eda7f1e54c6083fe809ce2ab814b72c
