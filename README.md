@@ -19,8 +19,10 @@ Hinteractive, v0.1
 
 В игре показаны основные возможности движка.
 
-`stack build`
-`stack exec hinteractive-exe`
+```bash
+stack build
+stack exec hinteractive-exe
+```
 
 Архитектура
 -----------
