@@ -16,7 +16,7 @@ import           ZorkLike.Locations
 
 -- | Initial location of the game.
 -- Does nothing except passing an initial state into the next location (`westOfHouse`).
-game :: AGGraph () ()
+game :: AGGraph ()
 game = graph $
   with (inputOnly (True, True))
     -/> westOfHouse
