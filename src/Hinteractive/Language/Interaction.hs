@@ -14,6 +14,9 @@ import           Hinteractive.Domain
 import           Hinteractive.Language.Language
 import           Hinteractive.Lens
 
+-- This module contains a game mechanics to work with user input
+-- and game objects.
+
 getInput :: AdventureL (Event, ())
 getInput = do
   userInput <- getUserInput
@@ -25,6 +28,7 @@ nop = pure ("", ())
 inputOnly :: a -> AdventureL (Event, a)
 inputOnly a = pure ("", a)
 
+-- Evaluates an action over the game object.
 evalAction
   :: (FromJSON objSt, ToJSON objSt, ToObject objType objSt)
   => objType
