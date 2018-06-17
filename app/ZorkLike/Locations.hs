@@ -17,12 +17,12 @@ import           ZorkLike.Scenarios
 type AGGraph a = Graph AdventureL a
 
 -- | Transient location that does nothing exept
--- evaluates the opening action on the mailbox.
+-- evaluating the opening action on the mailbox.
 -- NOTE: It's inconvenient to specify actions as transient locations.
 -- TODO: investigate a better approach.
 openMailbox :: (Bool, Bool) -> AGGraph ()
 openMailbox houseView = graph $
-  with (evalAction MailboxType "open" "mailbox" >> inputOnly houseView)
+  with (evalAction MailboxType "open" "mailbox" >> dataOnly houseView)
     -/> westOfHouse
 
 -- | West of House location.

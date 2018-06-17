@@ -17,16 +17,20 @@ import           Hinteractive.Lens
 -- This module contains a game mechanics to work with user input
 -- and game objects.
 
+-- | Requests user input and makes it an event.
 getInput :: AdventureL (Event, ())
 getInput = do
   userInput <- getUserInput
   pure (userInput, ())
 
+-- | Does nothing, returns empty event and empty data.
 nop :: AdventureL (Event, ())
 nop = pure ("", ())
 
-inputOnly :: a -> AdventureL (Event, a)
-inputOnly a = pure ("", a)
+-- TODO: a better naming.
+-- | Does nothing, returns value as some data.
+dataOnly :: a -> AdventureL (Event, a)
+dataOnly a = pure ("", a)
 
 -- Evaluates an action over the game object.
 evalAction

@@ -19,13 +19,13 @@ import           GHC.Generics      (Generic)
 import           Hinteractive
 import           Hinteractive.Lens
 
-data MailboxObj = MailboxObj
-  { _description :: String
-  , _container   :: Container
+data MailboxSt = MailboxSt
+  { _description :: String     -- ^ Description
+  , _container   :: Container  -- ^ Mailbox is a container
   }
   deriving (Generic, ToJSON, FromJSON)
 
-makeFieldsNoPrefix ''MailboxObj
+makeFieldsNoPrefix ''MailboxSt
 
 -- TODO: move to engine
 openContainer :: HasContainer obj Container => obj -> Maybe obj
@@ -44,29 +44,29 @@ describeObject (Object _ objSt _) = objSt ^. description
 ---------- Concrete objects
 
 data MailboxType = MailboxType
-type Mailbox = Object MailboxType MailboxObj
+type Mailbox = Object MailboxType MailboxSt
 
-mailboxObj = MailboxObj
+mailboxObj = MailboxSt
   { _description = "This is a small mailbox."
   , _container = Container Closed ["leaflet"]
   }
 
-instance ToObject MailboxType MailboxObj where
+instance ToObject MailboxType MailboxSt where
   object objSt = Object "mailbox" objSt $ Map.fromList
-    [ ("open",  Action openContainer  onOpenMailboxSuccess  onMailboxOpenFail  )
-    , ("close", Action closeContainer onCloseMailboxSuccess onMailboxCloseFail )
+    [ ("open",  Action openContainer  onMailboxOpenSuccess  onMailboxOpenFail  )
+    , ("close", Action closeContainer onOpenCloseSuccess onMailboxCloseFail )
     ]
 
-onOpenMailboxSuccess :: MailboxObj -> AdventureL ()
-onOpenMailboxSuccess mailbox = case mailbox ^. container.items of
+onMailboxOpenSuccess :: MailboxSt -> AdventureL ()
+onMailboxOpenSuccess mailbox = case mailbox ^. container.items of
   []    -> printMessage "Opened."
   items -> printMessage $ "Opening mailbox revealed " ++ intercalate ", " items
 
-onMailboxOpenFail :: MailboxObj -> AdventureL ()
+onMailboxOpenFail :: MailboxSt -> AdventureL ()
 onMailboxOpenFail _ = printMessage "Mailbox already opened."
 
-onCloseMailboxSuccess :: MailboxObj -> AdventureL ()
-onCloseMailboxSuccess _ = printMessage "Closed."
+onOpenCloseSuccess :: MailboxSt -> AdventureL ()
+onOpenCloseSuccess _ = printMessage "Closed."
 
-onMailboxCloseFail :: MailboxObj -> AdventureL ()
+onMailboxCloseFail :: MailboxSt -> AdventureL ()
 onMailboxCloseFail _ = printMessage "Mailbox already closed."

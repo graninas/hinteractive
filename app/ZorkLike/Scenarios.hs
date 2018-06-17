@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module ZorkLike.Scenarios where
 
 import           Control.Monad             (unless, void, when)
@@ -11,6 +12,8 @@ import           ZorkLike.Objects
 
 -- A Zork-like game demo.
 -- This module contains the graph of locations.
+
+-- | This scenario describes the "west of house" location.
 westOfHouse' :: (Bool, Bool) -> AdventureL ()
 westOfHouse' (showDescr, showMailbox) = do
   mailbox :: Mailbox <- getObject "mailbox"

@@ -45,7 +45,7 @@ interpret (ListItems next) = do
   mapM_ (lift . putStrLn . snd) $ Map.toList inv
   pure next
 
-interpret (GetObj name nextF) = do
+interpret (GetObjSt name nextF) = do
   Runtime _ objs <- get
   case Map.lookup name objs of
     Nothing  -> error $ "Object " ++ name ++ " not found."
@@ -53,7 +53,7 @@ interpret (GetObj name nextF) = do
       Nothing -> error $ "Object " ++ name ++ " failed to decode."
       Just r  -> pure $ nextF r
 
-interpret (PutObj name objSt next) = do
+interpret (PutObjSt name objSt next) = do
   Runtime inv objs <- get
   put $ Runtime inv $ Map.insert name (encode objSt) objs
   pure next
