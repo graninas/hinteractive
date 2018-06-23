@@ -13,5 +13,6 @@ inititalState = mkRuntime Map.empty initialObjectStates
 -- | Initial state of all game objects.
 initialObjectStates :: ObjectStates
 initialObjectStates = Map.fromList
-  [ ("mailbox", encode mailboxObj)
+  [ ("mailbox", encode mailboxSt)
+  , ("leaflet", encode leafletSt)
   ]

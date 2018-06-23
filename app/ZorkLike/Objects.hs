@@ -46,7 +46,7 @@ describeObject (Object _ objSt _) = objSt ^. description
 data MailboxType = MailboxType
 type Mailbox = Object MailboxType MailboxSt
 
-mailboxObj = MailboxSt
+mailboxSt = MailboxSt
   { _description = "This is a small mailbox."
   , _container = Container Closed ["leaflet"]
   }
@@ -70,3 +70,21 @@ onOpenCloseSuccess _ = printMessage "Closed."
 
 onMailboxCloseFail :: MailboxSt -> AdventureL ()
 onMailboxCloseFail _ = printMessage "Mailbox already closed."
+
+-- Leaflet
+
+type Messege = String
+
+leafletSt :: Messege
+leafletSt = "There are an amazing city in the east behind the high mountains"
+
+data MessegeType = MessegeType
+type Leaflet = Object MessegeType Messege
+
+instance ToObject MessegeType Messege where
+  object objSt = Object "leaflet" objSt $ Map.fromList
+    [ ("read", Action Just readLeaflet (const (pure ())))
+    ]
+
+readLeaflet :: Messege -> AdventureL ()
+readLeaflet = printMessage
