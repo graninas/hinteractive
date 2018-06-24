@@ -20,20 +20,20 @@ type AGGraph a = Graph AdventureL a
 -- evaluating the opening action on the mailbox.
 -- NOTE: It's inconvenient to specify actions as transient locations.
 -- TODO: investigate a better approach.
-openMailbox :: (Bool, Bool) -> AGGraph ()
-openMailbox houseView = graph $
-  with (evalAction MailboxType "open" "mailbox" >> dataOnly houseView)
+openMailbox :: AGGraph ()
+openMailbox = graph $
+  with (evalAction MailboxType "open" "mailbox")
     -/> westOfHouse
 
 -- | West of House location.
-westOfHouse :: AGGraph (Bool, Bool)
+westOfHouse :: AGGraph ()
 westOfHouse = graph $
-  with1 (\x -> westOfHouse' x >> getInput)
-    ~> on "open mailbox" (openMailbox (False, False))
-    ~> on "read leaflet" (reading (False, False))
+  with (westOfHouse' >> getInput)
+    ~> on "open mailbox" openMailbox
+    ~> on "read leaflet" reading
     /> leaf nop
 
-reading :: (Bool, Bool) -> AGGraph ()
-reading houseView = graph $
-  with (evalAction MessegeType "read" "leaflet" >> dataOnly houseView)
+reading :: AGGraph ()
+reading = graph $
+  with (evalAction MessegeType "read" "leaflet")
     -/> westOfHouse

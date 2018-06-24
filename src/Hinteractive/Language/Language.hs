@@ -14,7 +14,8 @@ import           Data.Maybe                (Maybe (..))
 
 import           Hinteractive.Domain.Item
 
-type ObjectName = String
+type ObjectName   = String
+type VariableName = String
 
 -- | Generalized ADT for game mechanics language.
 data AdventureLF next where
@@ -31,17 +32,26 @@ data AdventureLF next where
   GetObjSt :: FromJSON a => ObjectName -> (a -> next) -> AdventureLF next
   PutObjSt :: ToJSON a   => ObjectName -> a -> next -> AdventureLF next
 
+  -- | Arbitrary game state actions.
+  CreateVariable :: ToJSON a   => VariableName -> a -> next -> AdventureLF next
+  PutVariable    :: ToJSON a   => VariableName -> a -> next -> AdventureLF next
+  GetVariable    :: FromJSON a => VariableName -> (a -> next) -> AdventureLF next
+
 -- | Functor for AdventureLF.
 instance Functor AdventureLF where
-  fmap f (GetUserInput   nextF)     = GetUserInput   (f . nextF)
-  fmap f (PrintMessage s next)      = PrintMessage s (f next)
+  fmap f (GetUserInput   nextF)        = GetUserInput   (f . nextF)
+  fmap f (PrintMessage s next)         = PrintMessage s (f next)
 
-  fmap f (PutItem      s next)      = PutItem      s (f next)
-  fmap f (DropItem     s next)      = DropItem     s (f next)
-  fmap f (ListItems      next)      = ListItems      (f next)
+  fmap f (PutItem      s next)         = PutItem      s (f next)
+  fmap f (DropItem     s next)         = DropItem     s (f next)
+  fmap f (ListItems      next)         = ListItems      (f next)
 
-  fmap f (GetObjSt name    nextF)   = GetObjSt name       (f . nextF)
-  fmap f (PutObjSt name objSt next) = PutObjSt name objSt (f next)
+  fmap f (GetObjSt name    nextF)      = GetObjSt name       (f . nextF)
+  fmap f (PutObjSt name objSt next)    = PutObjSt name objSt (f next)
+
+  fmap f (CreateVariable name st next) = CreateVariable name st (f next)
+  fmap f (PutVariable    name st next) = PutVariable    name st (f next)
+  fmap f (GetVariable    name nextF)   = GetVariable    name (f . nextF)
 
 -- | Free monad for game mechanics language.
 type AdventureL = Free AdventureLF
@@ -69,3 +79,25 @@ dropItem s = liftF $ DropItem s ()
 -- | List items in the inventory.
 listItems :: AdventureL ()
 listItems = liftF $ ListItems ()
+
+-- Arbitrary game state actions
+
+createVariable
+  :: ToJSON a
+  => VariableName
+  -> a
+  -> AdventureL ()
+createVariable name a = liftF $ CreateVariable name a ()
+
+getVariable
+  :: FromJSON a
+  => VariableName
+  -> AdventureL a
+getVariable name = liftF $ GetVariable name id
+
+putVariable
+  :: ToJSON a
+  => VariableName
+  -> a
+  -> AdventureL ()
+putVariable name a = liftF $ PutVariable name a ()

@@ -14,11 +14,17 @@ import           ZorkLike.Locations
 import           ZorkLike.Objects
 import           ZorkLike.Scenarios
 
+initialize :: AdventureL ()
+initialize = createVariable "WestOfHouse" WestOfHouseView
+  { showDescription = True
+  , showMailboxDescription = True
+  }
+
 -- | Initial location of the game.
 -- Does nothing except passing an initial state into the next location (`westOfHouse`).
 game :: AGGraph ()
 game = graph $
-  with (dataOnly (True, True))
+  with (initialize >> nop)
     -/> westOfHouse
 
 -- | Start a game with the initial state and default "back" event.
