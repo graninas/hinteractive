@@ -8,7 +8,7 @@ import           ZorkLike.Objects
 
 -- | Initial state of the game. Game objects are clear, player's inventory is empty.
 inititalState :: Runtime
-inititalState = mkRuntime Map.empty initialObjectStates
+inititalState = mkRuntime Map.empty initialObjectStates Map.empty
 
 -- | Initial state of all game objects.
 initialObjectStates :: ObjectStates

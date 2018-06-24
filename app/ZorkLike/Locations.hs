@@ -28,6 +28,6 @@ openMailbox = graph $
 -- | West of House location.
 westOfHouse :: AGGraph ()
 westOfHouse = graph $
-  with1 (westOfHouse' >> getInput)
+  with (westOfHouse' >> getInput)
     ~> on "open mailbox" openMailbox
     /> leaf nop

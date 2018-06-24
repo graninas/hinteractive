@@ -16,7 +16,8 @@ import           Hinteractive.Language
 -- It is mostly about interpreting of the Free language AdventureL.
 
 -- | Serialized objects.
-type ObjectStates = Map.Map String BSL.ByteString
+type ObjectStates = Map.Map ObjectName   BSL.ByteString
+type Variables    = Map.Map VariableName BSL.ByteString
 
 -- | Inventory of the player (draft).
 type Inventory = Map.Map String Item
@@ -25,6 +26,7 @@ type Inventory = Map.Map String Item
 data Runtime = Runtime
   { _inventory    :: Map.Map String Item
   , _objectStates :: ObjectStates
+  , _variables    :: Variables
   }
 
 -- | Type for the interpreter of game scenarios.
@@ -41,27 +43,55 @@ interpret (PrintMessage s next)  = do
 interpret (PutItem s next) = error "Not implemented."
 interpret (DropItem s next) = error "Not implemented."
 interpret (ListItems next) = do
-  Runtime inv _ <- get
+  Runtime inv _ _ <- get
   mapM_ (lift . putStrLn . snd) $ Map.toList inv
   pure next
 
 interpret (GetObjSt name nextF) = do
-  Runtime _ objs <- get
+  Runtime _ objs _ <- get
   case Map.lookup name objs of
-    Nothing  -> error $ "Object " ++ name ++ " not found."
-    Just obj -> case decode obj of
+    Nothing     -> error $ "Object " ++ name ++ " not found."
+    Just objStr -> case decode objStr of
       Nothing -> error $ "Object " ++ name ++ " failed to decode."
       Just r  -> pure $ nextF r
 
 interpret (PutObjSt name objSt next) = do
-  Runtime inv objs <- get
-  put $ Runtime inv $ Map.insert name (encode objSt) objs
+  Runtime inv objs vars <- get
+  let newObjs = Map.insert name (encode objSt) objs
+  put $ Runtime inv newObjs vars
   pure next
+
+interpret (CreateVariable name var next) = do
+  Runtime inv objs vars <- get
+
+  case Map.lookup name vars of
+    Just _  -> error $ "Variable " ++ name ++ " already exists."
+    Nothing -> do
+      put $ Runtime inv objs $ Map.insert name (encode var) vars
+      pure next
+
+interpret (PutVariable name var next) = do
+  Runtime inv objs vars <- get
+
+  case Map.lookup name vars of
+    Nothing -> error $ "Variable " ++ name ++ " not found."
+    Just _  -> do
+      put $ Runtime inv objs $ Map.insert name (encode var) vars
+      pure next
+
+interpret (GetVariable name nextF) = do
+  Runtime inv objs vars <- get
+
+  case Map.lookup name vars of
+    Nothing -> error $ "Variable " ++ name ++ " not found."
+    Just a  -> case decode a of
+      Nothing -> error $ "Variable " ++ name ++ " failed to decode."
+      Just r  -> pure $ nextF r
 
 -- | Evaluates a game scenario over the game state (interprets the AdventureL language).
 run :: AdventureL (Event, s) -> Interpreter (Event, s)
 run = foldFree interpret
 
 -- | Creates a runtime for the game.
-mkRuntime :: Inventory -> ObjectStates -> Runtime
+mkRuntime :: Inventory -> ObjectStates -> Variables -> Runtime
 mkRuntime = Runtime
