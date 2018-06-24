@@ -30,4 +30,10 @@ westOfHouse :: AGGraph ()
 westOfHouse = graph $
   with (westOfHouse' >> getInput)
     ~> on "open mailbox" openMailbox
+    ~> on "read leaflet" reading
     /> leaf nop
+
+reading :: AGGraph ()
+reading = graph $
+  with (evalAction MessegeType "read" "leaflet")
+    -/> westOfHouse
