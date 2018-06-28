@@ -35,5 +35,5 @@ westOfHouse = graph $
 
 reading :: AGGraph ()
 reading = graph $
-  with (evalAction MessegeType "read" "leaflet")
+  with (evalAction MessageType "read" "leaflet")
     -/> westOfHouse

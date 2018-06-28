@@ -73,18 +73,18 @@ onMailboxCloseFail _ = printMessage "Mailbox already closed."
 
 -- Leaflet
 
-type Messege = String
+type Message = String
 
-leafletSt :: Messege
+leafletSt :: Message
 leafletSt = "There are an amazing city in the east behind the high mountains"
 
-data MessegeType = MessegeType
-type Leaflet = Object MessegeType Messege
+data MessageType = MessageType
+type Leaflet = Object MessageType Message
 
-instance ToObject MessegeType Messege where
+instance ToObject MessageType Message where
   object objSt = Object "leaflet" objSt $ Map.fromList
     [ ("read", Action Just readLeaflet (const (pure ())))
     ]
 
-readLeaflet :: Messege -> AdventureL ()
+readLeaflet :: Message -> AdventureL ()
 readLeaflet = printMessage
