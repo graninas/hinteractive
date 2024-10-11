@@ -1,5 +1,5 @@
-Hinteractive, v0.1
-===================
+Hinteractive: Interaction Fiction Game Engine
+============================================
 
 A game engine for creating text-based adventure games like Zork (under development).
 
